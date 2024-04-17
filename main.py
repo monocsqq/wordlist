@@ -23,24 +23,28 @@ def save_data():
 def search(key):
     try:
         data[key][1] += 1
-        return data[key][0]
+        return f"意味: {data[key][0]}\n検索回数: {data[key][1]}"
     except KeyError:
         print('word not found')
         print('Do you want to add it?')
         add = input('[y]/n: ')
         if add == 'y' or add == '':
-            try:
-                temp = ['word', 0]
-                temp[0] = input('Enter the word: ')
-                data[key] = temp 
-            except KeyboardInterrupt:
-                print('Cancelled')
-                return
+            add_word(key)
             return data[key][0]
         else:
-            print('Cancelled')
-            return
+            return 'Cancelled'
 
+# Add a word
+def add_word(key):
+    try:
+        temp = ['word', 0]
+        temp[0] = input('Enter the word: ')
+        data[key] = temp 
+    except KeyboardInterrupt:
+        return 'Cancelled'
+    return data[key][0]
+
+# Main
 if __name__ == '__main__':
     print('Loading data')
     load_data()
@@ -51,10 +55,10 @@ if __name__ == '__main__':
         try:
             word = input('Enter word: ')
             if word == 'Q':
-                print('Bye')
                 break
             print(search(word))
         except KeyboardInterrupt:
-            print('\nBye')
+            print('')
             break
+    print('Bye')
     atexit.register(save_data)
