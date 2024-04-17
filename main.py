@@ -32,11 +32,11 @@ def search(key):
             try:
                 temp = ['word', 0]
                 temp[0] = input('Enter the word: ')
-                data[key].append(temp[0]) 
+                data[key] = temp 
             except KeyboardInterrupt:
                 print('Cancelled')
                 return
-            return data[key]
+            return data[key][0]
         else:
             print('Cancelled')
             return
