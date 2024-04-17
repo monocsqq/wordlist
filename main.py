@@ -1,6 +1,7 @@
 import atexit
 import pandas as pd
 import pickle
+import re
 
 data = {}
 
@@ -19,6 +20,10 @@ def save_data():
     with open('data.pkl', 'wb') as f:
         pickle.dump(data, f)
 
+# check word
+def is_word(word):
+    return re.match(r'^[a-zA-Z]+$', word)
+
 # Search for a key
 def search(key):
     try:
@@ -29,8 +34,7 @@ def search(key):
         print('Do you want to add it?')
         add = input('[y]/n: ')
         if add == 'y' or add == '':
-            add_word(key)
-            return data[key][0]
+            return add_word(key)
         else:
             return 'Cancelled'
 
@@ -40,8 +44,27 @@ def add_word(key):
         temp = ['word', 0]
         temp[0] = input('Enter the word: ')
         data[key] = temp 
+        return data[key][0]
     except KeyboardInterrupt:
-        return 'Cancelled'
+        return '\nCancelled'
+    # return data[key][0]
+
+# Edit a word
+def edit(key):
+    try:
+        temp = ['word', data[key][1]]
+        temp[0] = input('Enter the word: ')
+        data[key] = temp 
+    except KeyError:
+        print('word not found')
+        print('Do you want to add it?')
+        add = input('[y]/n: ')
+        if add == 'y' or add == '':
+            return add_word(key)
+        else:
+            return 'Cancelled'
+    except KeyboardInterrupt:
+        return '\nCancelled'
     return data[key][0]
 
 # Main
@@ -50,13 +73,25 @@ if __name__ == '__main__':
     load_data()
     print('Data loaded')
     print('Enter a word to search')
-    print('If you want to quit, enter Q or press ctrl+C')
+    print('If you want to quit, press ctrl+C')
+    # Mode: S = Search, E = Edit 
+    mode = 'Search' # Search mode
     while True:
         try:
-            word = input('Enter word: ')
-            if word == 'Q':
-                break
-            print(search(word))
+            word = input(f'({mode})Enter word: ')
+            elif word == 'S':
+                mode = 'Search'
+                continue
+            elif word == 'E':
+                mode = 'Edit'
+                continue
+            elif not is_word(word):
+                print('Invalid word')
+                continue
+            if mode == 'Search':
+                print(search(word))
+            elif mode == 'Edit':
+                print(edit(word))
         except KeyboardInterrupt:
             print('')
             break
