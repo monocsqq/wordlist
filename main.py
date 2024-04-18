@@ -67,6 +67,13 @@ def edit(key):
         return '\nCancelled'
     return data[key][0]
 
+def del_word(key):
+    try:
+        del data[key]
+        return 'Deleted'
+    except KeyError:
+        return 'word not found'
+
 # Main
 if __name__ == '__main__':
     print('Loading data')
@@ -74,16 +81,19 @@ if __name__ == '__main__':
     print('Data loaded')
     print('Enter a word to search')
     print('If you want to quit, press ctrl+C')
-    # Mode: S = Search, E = Edit 
+    # Mode: S = Search, E = Edit, R = Remove
     mode = 'Search' # Search mode
     while True:
         try:
             word = input(f'({mode})Enter word: ')
-            elif word == 'S':
+            if word == 'S':
                 mode = 'Search'
                 continue
             elif word == 'E':
                 mode = 'Edit'
+                continue
+            elif word == 'R':
+                mode = 'Remove'
                 continue
             elif not is_word(word):
                 print('Invalid word')
@@ -92,6 +102,12 @@ if __name__ == '__main__':
                 print(search(word))
             elif mode == 'Edit':
                 print(edit(word))
+            elif mode == 'Remove':
+                print('Are you sure you want to delete this word?')
+                if input(f'{word} [y]/n: ') == 'y':
+                    print(del_word(word))
+                else:
+                    print('Cancelled')
         except KeyboardInterrupt:
             print('')
             break
