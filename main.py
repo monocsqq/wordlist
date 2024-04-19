@@ -45,6 +45,8 @@ def search(key):
                 return 'Cancelled'
         except KeyboardInterrupt:
             return '\nCancelled'
+        except EOFError:
+            return '\nCancelled'
 
 # Add a word
 def add_word(key):
@@ -54,6 +56,8 @@ def add_word(key):
         data[key] = temp 
         return data[key][0]
     except KeyboardInterrupt:
+        return '\nCancelled'
+    except EOFError:
         return '\nCancelled'
     # return data[key][0]
 
@@ -74,7 +78,11 @@ def edit(key):
                 return 'Cancelled'
         except KeyboardInterrupt:
             return '\nCancelled'
+        except EOFError:
+            return '\nCancelled'
     except KeyboardInterrupt:
+        return '\nCancelled'
+    except EOFError:
         return '\nCancelled'
     return data[key][0]
 
@@ -91,6 +99,8 @@ def del_word(key):
             return 'Cancelled'
     except KeyboardInterrupt:
         return '\nCancelled'
+    except EOFError:
+        return '\nCancelled'
 
 # Main
 def main():
@@ -98,7 +108,6 @@ def main():
     load_data()
     print('Data loaded')
     print('Enter a word to search')
-    print('If you want to quit, press ctrl+C')
     # Mode: S = Search, E = Edit, R = Remove
     mode = 'Search' # Search mode
     while True:
@@ -125,6 +134,9 @@ def main():
             elif mode == 'Remove':
                 print(del_word(word))
         except KeyboardInterrupt:
+            print('')
+            break
+        except EOFError:
             print('')
             break
     print('Bye')
