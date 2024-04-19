@@ -1,24 +1,29 @@
 import atexit
+import os
 import pandas as pd
 import pickle
 import re
+import sys
 
+install_dir = os.path.dirname(sys.executable)
 data = {}
 
 # Load the data
 def load_data():
     global data
     try:
-        with open('data.pkl', 'rb') as f:
+        with open(os.path.join(install_dir, 'data.pkl'), 'rb') as f:
             data = pickle.load(f)
     except FileNotFoundError:
         print('File not found, creating new data')
+        #print('path:', os.path.join(install_dir, 'data.pkl'))
         data = {"sample" : ["サンプル", 0]}
 
 # Save the data
 def save_data():
-    with open('data.pkl', 'wb') as f:
+    with open(os.path.join(install_dir, 'data.pkl'), 'wb') as f:
         pickle.dump(data, f)
+    print('Data saved to:', os.path.join(install_dir, 'data.pkl'))
 
 # check word
 def is_word(word):
@@ -32,11 +37,14 @@ def search(key):
     except KeyError:
         print(f'word not found: {key}')
         print('Do you want to add it?')
-        add = input('[y]/n: ')
-        if add == 'y' or add == '':
-            return add_word(key)
-        else:
-            return 'Cancelled'
+        try:
+            add = input('[y]/n: ')
+            if add == 'y' or add == '':
+                return add_word(key)
+            else:
+                return 'Cancelled'
+        except KeyboardInterrupt:
+            return '\nCancelled'
 
 # Add a word
 def add_word(key):
@@ -58,11 +66,14 @@ def edit(key):
     except KeyError:
         print('word not found')
         print('Do you want to add it?')
-        add = input('[y]/n: ')
-        if add == 'y' or add == '':
-            return add_word(key)
-        else:
-            return 'Cancelled'
+        try:
+            add = input('[y]/n: ')
+            if add == 'y' or add == '':
+                return add_word(key)
+            else:
+                return 'Cancelled'
+        except KeyboardInterrupt:
+            return '\nCancelled'
     except KeyboardInterrupt:
         return '\nCancelled'
     return data[key][0]

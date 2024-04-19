@@ -33,6 +33,6 @@ You can add a word when you can't find it in the search mode(I plan to add Add m
 単語の追加は検索モードで見つからなかった場合に行うことができます（将来的に追加モードを追加する予定です）．
 
 ## Caution
-You may notice that `data.pkl` is created in the directory where you run the app. This file contains all the words and their meanings. Do not delete this file or you will lose all your data.
+You may notice that `data.pkl` is created in the directory where the app installed. This file contains all the words and their meanings. Do not delete this file or you will lose all your data.
 
-同一ディレクトリ内に生成される`data.pkl`は単語と意味を保存しています．このファイルを削除するとデータが失われるので注意してください．
+インストールディレクトリ内に生成される`data.pkl`は単語と意味を保存しています．このファイルを削除するとデータが失われるので注意してください．
