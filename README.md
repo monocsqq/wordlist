@@ -8,7 +8,7 @@ This is a simple vocabulary app that works in the terminal. It is a simple way t
 2. Run the following command in the terminal:
 ```bash
 cd wordlist
-python3 -m pip install -e .
+python3 -m pip install .
 ```
 3. You can now run the app by typing `wordlist` in the terminal!
 
@@ -19,4 +19,8 @@ You can change the mode of the app by typing,
 - E: Edit mode
 - R: Remove mode
 - Q: Quit
-You can add a word when you can't find it in the search mode.(I plan to add Add mode in the future)
+
+You can add a word when you can't find it in the search mode(I plan to add Add mode in the future).
+
+## Caution
+You may notice that `data.pkl` is created in the directory where you run the app. This file contains all the words and their meanings. Do not delete this file or you will lose all your data.
