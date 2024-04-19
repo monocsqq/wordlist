@@ -29,6 +29,7 @@ You can add a word when you can't find it in the search mode(I plan to add Add m
 - E: 編集モード
 - R: 削除モード
 - Q: 終了
+
 単語の追加は検索モードで見つからなかった場合に行うことができます（将来的に追加モードを追加する予定です）．
 
 ## Caution
