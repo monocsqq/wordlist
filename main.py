@@ -102,6 +102,8 @@ def main():
             elif word == 'R':
                 mode = 'Remove'
                 continue
+            elif word == 'Q':
+                break
             elif not is_word(word):
                 print('Invalid word')
                 continue
