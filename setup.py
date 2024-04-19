@@ -11,4 +11,5 @@ setup(
                 'wordlist=main:main',
                 ],
             },
+        py_modules=['main'],
         )
