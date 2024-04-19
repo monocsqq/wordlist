@@ -14,6 +14,7 @@ python3 -m pip install .
 ```
 3. You can now run the app by typing `wordlist` in the terminal!
 
+
 1. リポジトリをクローンします．
 2. ターミナルで以下のコマンドを実行します：
 ```bash
