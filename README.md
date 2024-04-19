@@ -6,22 +6,13 @@ This is a simple vocabulary app that works in the terminal. It is a simple way t
 ターミナル上で動作するシンプルな単語帳アプリです．学習中の単語と意味を整理できます．
 
 ## Installation
-1. Clone this repository
-2. Run the following command in the terminal:
+1. Clone this repository(リポジトリをクローンします)
+2. Run the following command in the terminal(ターミナルで以下のコマンドを実行します):
 ```bash
 cd wordlist
 python3 -m pip install .
 ```
-3. You can now run the app by typing `wordlist` in the terminal!
-
-
-1. リポジトリをクローンします．
-2. ターミナルで以下のコマンドを実行します：
-```bash
-cd wordlist
-python3 -m pip install .
-```
-3. ターミナルで`wordlist`と入力するとアプリが起動します．
+3. You can now run the app by typing `wordlist` in the terminal!(ターミナルで`wordlist`と入力するとアプリが起動します)
 
 ## Usage
 The app is very simple to use. You can add words and their meanings and search for a word to see its meaning.
