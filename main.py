@@ -30,7 +30,7 @@ def search(key):
         data[key][1] += 1
         return f"意味: {data[key][0]}\n検索回数: {data[key][1]}"
     except KeyError:
-        print('word not found')
+        print(f'word not found: {key}')
         print('Do you want to add it?')
         add = input('[y]/n: ')
         if add == 'y' or add == '':
@@ -69,13 +69,20 @@ def edit(key):
 
 def del_word(key):
     try:
-        del data[key]
-        return 'Deleted'
-    except KeyError:
-        return 'word not found'
+        print(f'Are you sure you want to delete this word?: {key}')
+        if input(f'y/n: ') == 'y':
+            try:
+                del data[key]
+                return 'Deleted: {key}'
+            except KeyError:
+                return 'word not found: {key}'
+        else:
+            return 'Cancelled'
+    except KeyboardInterrupt:
+        return '\nCancelled'
 
 # Main
-if __name__ == '__main__':
+def main():
     print('Loading data')
     load_data()
     print('Data loaded')
@@ -103,13 +110,12 @@ if __name__ == '__main__':
             elif mode == 'Edit':
                 print(edit(word))
             elif mode == 'Remove':
-                print('Are you sure you want to delete this word?')
-                if input(f'{word} [y]/n: ') == 'y':
-                    print(del_word(word))
-                else:
-                    print('Cancelled')
+                print(del_word(word))
         except KeyboardInterrupt:
             print('')
             break
     print('Bye')
     atexit.register(save_data)
+
+if __name__ == '__main__':
+    main()
