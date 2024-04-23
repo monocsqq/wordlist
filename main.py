@@ -49,16 +49,18 @@ def search(key):
 
 # Add a word
 def add_word(key):
+    if key in data:
+        print('the word already exists')
+        return 'Cancelled'
     try:
         temp = ['word', 0]
-        temp[0] = input('Enter the word: ')
+        temp[0] = input('Enter the meaning: ')
         data[key] = temp 
         return data[key][0]
     except KeyboardInterrupt:
         return '\nCancelled'
     except EOFError:
         return '\nCancelled'
-    # return data[key][0]
 
 # Edit a word
 def edit(key):
@@ -115,6 +117,9 @@ def main():
             if word == 'S':
                 mode = 'Search'
                 continue
+            elif word == 'A':
+                mode = 'Add'
+                continue
             elif word == 'E':
                 mode = 'Edit'
                 continue
@@ -128,6 +133,8 @@ def main():
                 continue
             if mode == 'Search':
                 print(search(word))
+            elif mode == 'Add':
+                print(add_word(word))
             elif mode == 'Edit':
                 print(edit(word))
             elif mode == 'Remove':
