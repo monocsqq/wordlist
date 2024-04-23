@@ -18,11 +18,11 @@ python3 -m pip install .
 The app is very simple to use. You can add words and their meanings and search for a word to see its meaning.
 You can change the mode of the app by typing,
 - S: Search mode
+- A: Add mode
 - E: Edit mode
 - R: Remove mode
 - Q: Quit
 
-You can add a word when you can't find it in the search mode(I plan to add Add mode in the future).
 
 単語の検索，追加，編集，削除ができます．以下の文字を入力することでモードを変更できます．
 - S: 検索モード
