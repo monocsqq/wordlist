@@ -26,11 +26,11 @@ You can add a word when you can't find it in the search mode(I plan to add Add m
 
 単語の検索，追加，編集，削除ができます．以下の文字を入力することでモードを変更できます．
 - S: 検索モード
+- A: 追加モード
 - E: 編集モード
 - R: 削除モード
 - Q: 終了
 
-単語の追加は検索モードで見つからなかった場合に行うことができます（将来的に追加モードを追加する予定です）．
 
 ## Caution
 You may notice that `data.pkl` is created in the directory where the app installed. This file contains all the words and their meanings. Do not delete this file or you will lose all your data.
