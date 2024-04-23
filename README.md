@@ -25,6 +25,7 @@ You can change the mode of the app by typing,
 - A: Add mode
 - E: Edit mode
 - R: Remove mode
+- L: List mode
 - Q: Quit
 
 
@@ -33,6 +34,7 @@ You can change the mode of the app by typing,
 - A: 追加モード
 - E: 編集モード
 - R: 削除モード
+- L: 一覧表示モード
 - Q: 終了
 
 
