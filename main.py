@@ -11,18 +11,18 @@ data = {}
 def load_data():
     global data
     try:
-        with open(os.path.join(install_dir, 'data.pkl'), 'rb') as f:
+        with open(os.path.join(install_dir, 'wordlist_data.pkl'), 'rb') as f:
             data = pickle.load(f)
     except FileNotFoundError:
         print('File not found, creating new data')
-        #print('path:', os.path.join(install_dir, 'data.pkl'))
+        #print('path:', os.path.join(install_dir, 'wordlist_data.pkl'))
         data = {"sample" : ["サンプル", 0]}
 
 # Save the data
 def save_data():
-    with open(os.path.join(install_dir, 'data.pkl'), 'wb') as f:
+    with open(os.path.join(install_dir, 'wordlist_data.pkl'), 'wb') as f:
         pickle.dump(data, f)
-    print('Data saved to:', os.path.join(install_dir, 'data.pkl'))
+    print('Data saved to:', os.path.join(install_dir, 'wordlist_data.pkl'))
 
 # check word
 def is_word(word):
@@ -103,6 +103,10 @@ def del_word(key):
     except EOFError:
         return '\nCancelled'
 
+def list_words():
+    for key in sorted(data.keys()):
+        print(f'{key}: {data[key][0]}')
+
 # Main
 def main():
     print('Loading data')
@@ -125,6 +129,9 @@ def main():
                 continue
             elif word == 'R':
                 mode = 'Remove'
+                continue
+            elif word == 'L':
+                list_words()
                 continue
             elif word == 'Q':
                 break
