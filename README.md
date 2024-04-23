@@ -6,13 +6,11 @@ This is a simple vocabulary app that works in the terminal. It is a simple way t
 ターミナル上で動作するシンプルな単語帳アプリです．学習中の単語と意味を整理できます．
 
 ## Installation
-1. Clone this repository(リポジトリをクローンします)
-2. Run the following command in the terminal(ターミナルで以下のコマンドを実行します):
+1. Run the following command in the terminal(ターミナルで以下のコマンドを実行します):
 ```bash
-cd wordlist
-python3 -m pip install .
+python3 -m pip install git+https://github.com/monocsqq/wordlist.git
 ```
-3. You can now run the app by typing `wordlist` in the terminal!(ターミナルで`wordlist`と入力するとアプリが起動します)
+2. You can now run the app by typing `wordlist` in the terminal!(ターミナルで`wordlist`と入力するとアプリが起動します)
 
 ## Usage
 The app is very simple to use. You can add words and their meanings and search for a word to see its meaning.
@@ -33,6 +31,6 @@ You can change the mode of the app by typing,
 
 
 ## Caution
-You may notice that `data.pkl` is created in the directory where the app installed. This file contains all the words and their meanings. Do not delete this file or you will lose all your data.
+You may notice that `wordlist_data.pkl` is created in the home directory. This file contains all the words and their meanings. Do not delete this file or you will lose all your data.
 
-インストールディレクトリ内に生成される`data.pkl`は単語と意味を保存しています．このファイルを削除するとデータが失われるので注意してください．
+ホームディレクトリ内に生成される`wordlist_data.pkl`は単語と意味を保存しています．このファイルを削除するとデータが失われるので注意してください．

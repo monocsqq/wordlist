@@ -4,25 +4,30 @@ import pickle
 import re
 import sys
 
-install_dir = os.path.dirname(sys.executable)
+home_dir = os.path.expanduser("~")
+dirname = '.wordlist'
+dirpath = os.path.join(home_dir, dirname)
 data = {}
 
 # Load the data
 def load_data():
     global data
     try:
-        with open(os.path.join(install_dir, 'wordlist_data.pkl'), 'rb') as f:
+        with open(os.path.join(dirpath, 'wordlist_data.pkl'), 'rb') as f:
             data = pickle.load(f)
     except FileNotFoundError:
+        try:
+            os.mkdir(dirpath)
+        except FileExistsError:
+            pass
         print('File not found, creating new data')
-        #print('path:', os.path.join(install_dir, 'wordlist_data.pkl'))
         data = {"sample" : ["サンプル", 0]}
 
 # Save the data
 def save_data():
-    with open(os.path.join(install_dir, 'wordlist_data.pkl'), 'wb') as f:
+    with open(os.path.join(dirpath, 'wordlist_data.pkl'), 'wb') as f:
         pickle.dump(data, f)
-    print('Data saved to:', os.path.join(install_dir, 'wordlist_data.pkl'))
+    print('Data saved to:', os.path.join(dirpath, 'wordlist_data.pkl'))
 
 # check word
 def is_word(word):
