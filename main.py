@@ -60,7 +60,7 @@ def add_word(key):
     try:
         temp = ['word', 0]
         temp[0] = input('Enter the meaning: ')
-        data[key] = temp 
+        data[key] = temp
         return data[key][0]
     except KeyboardInterrupt:
         return '\nCancelled'
@@ -72,7 +72,7 @@ def edit(key):
     try:
         temp = ['word', data[key][1]]
         temp[0] = input('Enter the word: ')
-        data[key] = temp 
+        data[key] = temp
     except KeyError:
         print('word not found')
         print('Do you want to add it?')
@@ -110,7 +110,7 @@ def del_word(key):
 
 def list_words():
     for key in sorted(data.keys()):
-        print(f'{key}: {data[key][0]}')
+        print(f'{key}: {data[key][0]}({data[key][1]})')
 
 # Main
 def main():
