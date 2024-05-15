@@ -94,15 +94,14 @@ def edit(key):
 
 def del_word(key):
     try:
-        print(f'Are you sure you want to delete this word?: {key}')
+        print(f'Are you sure you want to delete this word?: {key}: {data[key][0]}')
         if input(f'y/n: ') == 'y':
-            try:
-                del data[key]
-                return 'Deleted: {key}'
-            except KeyError:
-                return 'word not found: {key}'
+            del data[key]
+            return f'Deleted: {key}'
         else:
             return 'Cancelled'
+    except KeyError:
+        return f'word not found: {key}'
     except KeyboardInterrupt:
         return '\nCancelled'
     except EOFError:
