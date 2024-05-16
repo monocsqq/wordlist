@@ -61,6 +61,7 @@ def add_word(key):
         temp = ['word', 0]
         temp[0] = input('Enter the meaning: ')
         data[key] = temp
+        save_data()
         return data[key][0]
     except KeyboardInterrupt:
         return '\nCancelled'
