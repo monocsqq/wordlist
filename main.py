@@ -1,6 +1,7 @@
 import atexit
 import os
 import pickle
+import pydoc
 import re
 import sys
 
@@ -27,7 +28,6 @@ def load_data():
 def save_data():
     with open(os.path.join(dirpath, 'wordlist_data.pkl'), 'wb') as f:
         pickle.dump(data, f)
-    print('Data saved to:', os.path.join(dirpath, 'wordlist_data.pkl'))
 
 # check word
 def is_word(word):
@@ -109,8 +109,10 @@ def del_word(key):
         return '\nCancelled'
 
 def list_words():
-    for key in sorted(data.keys()):
-        print(f'{key}: {data[key][0]}({data[key][1]})')
+    #for key in sorted(data.keys()):
+        #print(f'{key}: {data[key][0]}({data[key][1]})')
+    output = '\n'.join([f'{key}: {data[key][0]}({data[key][1]})' for key in sorted(data.keys())])
+    pydoc.pager(output)
 
 # Main
 def main():
@@ -159,6 +161,7 @@ def main():
             break
     print('Bye')
     atexit.register(save_data)
+    print('Data saved to:', os.path.join(dirpath, 'wordlist_data.pkl'))
 
 if __name__ == '__main__':
     main()
