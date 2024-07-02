@@ -4,11 +4,14 @@ import pickle
 import pydoc
 import re
 import sys
+from googletrans import Translator
 
 home_dir = os.path.expanduser("~")
 dirname = '.wordlist'
 dirpath = os.path.join(home_dir, dirname)
 data = {}
+
+translator = Translator()
 
 # Load the data
 def load_data():
@@ -59,7 +62,8 @@ def add_word(key):
         return 'Cancelled'
     try:
         temp = ['word', 0]
-        temp[0] = input('Enter the meaning: ')
+        #temp[0] = input('Enter the meaning: ')
+        temp[0] = translator.translate(key, dest='ja').text
         data[key] = temp
         save_data()
         return data[key][0]
