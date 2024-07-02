@@ -4,6 +4,7 @@ import pickle
 import pydoc
 import re
 import sys
+from timeout_decorator import timeout, TimeoutError
 from googletrans import Translator
 
 home_dir = os.path.expanduser("~")
@@ -118,54 +119,61 @@ def list_words():
     output = '\n'.join([f'{key}: {data[key][0]}({data[key][1]})' for key in sorted(data.keys())])
     pydoc.pager(output)
 
-# Main
-def main():
-    print('Loading data')
-    load_data()
-    print('Data loaded')
-    print('Enter a word to search')
-    # Mode: S = Search, E = Edit, R = Remove
-    mode = 'Search' # Search mode
-    while True:
-        try:
-            word = input(f'({mode})Enter word: ')
-            if word == 'S':
-                mode = 'Search'
-                continue
-            elif word == 'A':
-                mode = 'Add'
-                continue
-            elif word == 'E':
-                mode = 'Edit'
-                continue
-            elif word == 'R':
-                mode = 'Remove'
-                continue
-            elif word == 'L':
-                list_words()
-                continue
-            elif word == 'Q':
-                break
-            elif not is_word(word):
-                print('Invalid word')
-                continue
-            if mode == 'Search':
-                print(search(word))
-            elif mode == 'Add':
-                print(add_word(word))
-            elif mode == 'Edit':
-                print(edit(word))
-            elif mode == 'Remove':
-                print(del_word(word))
-        except KeyboardInterrupt:
-            print('')
-            break
-        except EOFError:
-            print('')
-            break
-    print('Bye')
-    atexit.register(save_data)
+def exit_app():
+    save_data()
     print('Data saved to:', os.path.join(dirpath, 'wordlist_data.pkl'))
+# Main
+@timeout(600)
+def main():
+    try:
+        print('Loading data')
+        load_data()
+        print('Data loaded')
+        print('Enter a word to search')
+        # Mode: S = Search, E = Edit, R = Remove
+        mode = 'Search' # Search mode
+        while True:
+            try:
+                word = input(f'({mode})Enter word: ')
+                if word == 'S':
+                    mode = 'Search'
+                    continue
+                elif word == 'A':
+                    mode = 'Add'
+                    continue
+                elif word == 'E':
+                    mode = 'Edit'
+                    continue
+                elif word == 'R':
+                    mode = 'Remove'
+                    continue
+                elif word == 'L':
+                    list_words()
+                    continue
+                elif word == 'Q':
+                    break
+                elif not is_word(word):
+                    print('Invalid word')
+                    continue
+                if mode == 'Search':
+                    print(search(word))
+                elif mode == 'Add':
+                    print(add_word(word))
+                elif mode == 'Edit':
+                    print(edit(word))
+                elif mode == 'Remove':
+                    print(del_word(word))
+            except KeyboardInterrupt:
+                print('')
+                break
+            except EOFError:
+                print('')
+                break
+        print('Bye')
+        exit_app()
+    except TimeoutError:
+        print('\nTimeout')
+        exit_app()
 
 if __name__ == '__main__':
     main()
