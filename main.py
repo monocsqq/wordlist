@@ -4,38 +4,43 @@ import pickle
 import pydoc
 import re
 import sys
-from timeout_decorator import timeout, TimeoutError
+
 from googletrans import Translator
+from timeout_decorator import TimeoutError, timeout
 
 home_dir = os.path.expanduser("~")
-dirname = '.wordlist'
+dirname = ".wordlist"
 dirpath = os.path.join(home_dir, dirname)
 data = {}
 
 translator = Translator()
 
+
 # Load the data
 def load_data():
     global data
     try:
-        with open(os.path.join(dirpath, 'wordlist_data.pkl'), 'rb') as f:
+        with open(os.path.join(dirpath, "wordlist_data.pkl"), "rb") as f:
             data = pickle.load(f)
     except FileNotFoundError:
         try:
             os.mkdir(dirpath)
         except FileExistsError:
             pass
-        print('File not found, creating new data')
-        data = {"sample" : ["サンプル", 0]}
+        print("File not found, creating new data")
+        data = {"sample": ["サンプル", 0]}
+
 
 # Save the data
 def save_data():
-    with open(os.path.join(dirpath, 'wordlist_data.pkl'), 'wb') as f:
+    with open(os.path.join(dirpath, "wordlist_data.pkl"), "wb") as f:
         pickle.dump(data, f)
+
 
 # check word
 def is_word(word):
-    return re.match(r'^[a-zA-Z]+$', word)
+    return re.match(r"^[a-zA-Z]+$", word)
+
 
 # Search for a key
 def search(key):
@@ -43,137 +48,147 @@ def search(key):
         data[key][1] += 1
         return f"意味: {data[key][0]}\n検索回数: {data[key][1]}"
     except KeyError:
-        print(f'word not found: {key}')
-        print('Do you want to add it?')
+        print(f"word not found: {key}")
+        print("Do you want to add it?")
         try:
-            add = input('[y]/n: ')
-            if add == 'y' or add == '':
+            add = input("[y]/n: ")
+            if add == "y" or add == "":
                 return add_word(key)
             else:
-                return 'Cancelled'
+                return "Cancelled"
         except KeyboardInterrupt:
-            return '\nCancelled'
+            return "\nCancelled"
         except EOFError:
-            return '\nCancelled'
+            return "\nCancelled"
+
 
 # Add a word
 def add_word(key):
     if key in data:
-        print('the word already exists')
-        return 'Cancelled'
+        print("the word already exists")
+        return "Cancelled"
     try:
-        temp = ['word', 0]
-        #temp[0] = input('Enter the meaning: ')
-        temp[0] = translator.translate(key, dest='ja').text
+        temp = ["word", 0]
+        # temp[0] = input('Enter the meaning: ')
+        temp[0] = translator.translate(key, dest="ja").text
         data[key] = temp
         save_data()
         return data[key][0]
     except KeyboardInterrupt:
-        return '\nCancelled'
+        return "\nCancelled"
     except EOFError:
-        return '\nCancelled'
+        return "\nCancelled"
+
 
 # Edit a word
 def edit(key):
     try:
-        temp = ['word', data[key][1]]
-        temp[0] = input('Enter the word: ')
+        temp = ["word", data[key][1]]
+        temp[0] = input("Enter the word: ")
         data[key] = temp
     except KeyError:
-        print('word not found')
-        print('Do you want to add it?')
+        print("word not found")
+        print("Do you want to add it?")
         try:
-            add = input('[y]/n: ')
-            if add == 'y' or add == '':
+            add = input("[y]/n: ")
+            if add == "y" or add == "":
                 return add_word(key)
             else:
-                return 'Cancelled'
+                return "Cancelled"
         except KeyboardInterrupt:
-            return '\nCancelled'
+            return "\nCancelled"
         except EOFError:
-            return '\nCancelled'
+            return "\nCancelled"
     except KeyboardInterrupt:
-        return '\nCancelled'
+        return "\nCancelled"
     except EOFError:
-        return '\nCancelled'
+        return "\nCancelled"
     return data[key][0]
+
 
 def del_word(key):
     try:
-        print(f'Are you sure you want to delete this word?: {key}: {data[key][0]}')
-        if input(f'y/n: ') == 'y':
+        print(f"Are you sure you want to delete this word?: {key}: {data[key][0]}")
+        if input(f"y/n: ") == "y":
             del data[key]
-            return f'Deleted: {key}'
+            return f"Deleted: {key}"
         else:
-            return 'Cancelled'
+            return "Cancelled"
     except KeyError:
-        return f'word not found: {key}'
+        return f"word not found: {key}"
     except KeyboardInterrupt:
-        return '\nCancelled'
+        return "\nCancelled"
     except EOFError:
-        return '\nCancelled'
+        return "\nCancelled"
+
 
 def list_words():
-    #for key in sorted(data.keys()):
-        #print(f'{key}: {data[key][0]}({data[key][1]})')
-    output = '\n'.join([f'{key}: {data[key][0]}({data[key][1]})' for key in sorted(data.keys())])
+    # for key in sorted(data.keys()):
+    # print(f'{key}: {data[key][0]}({data[key][1]})')
+    output = "\n".join(
+        [f"{key}: {data[key][0]}({data[key][1]})" for key in sorted(data.keys())]
+    )
     pydoc.pager(output)
+
 
 def exit_app():
     save_data()
-    print('Data saved to:', os.path.join(dirpath, 'wordlist_data.pkl'))
+    print("Data saved to:", os.path.join(dirpath, "wordlist_data.pkl"))
+
+
 # Main
 @timeout(600)
 def main():
     try:
-        print('Loading data')
+        print("Loading data")
         load_data()
-        print('Data loaded')
-        print('Enter a word to search')
+        print("Data loaded")
+        print("Enter a word to search")
         # Mode: S = Search, E = Edit, R = Remove
-        mode = 'Search' # Search mode
+        mode = "Search"  # Search mode
         while True:
             try:
-                word = input(f'({mode})Enter word: ')
-                if word == 'S':
-                    mode = 'Search'
+                word = input(f"({mode})Enter word: ")
+                if word == "S":
+                    mode = "Search"
                     continue
-                elif word == 'A':
-                    mode = 'Add'
+                elif word == "A":
+                    mode = "Add"
                     continue
-                elif word == 'E':
-                    mode = 'Edit'
+                elif word == "E":
+                    mode = "Edit"
                     continue
-                elif word == 'R':
-                    mode = 'Remove'
+                elif word == "R":
+                    mode = "Remove"
                     continue
-                elif word == 'L':
+                elif word == "L":
                     list_words()
                     continue
-                elif word == 'Q':
+                elif word == "Q":
                     break
                 elif not is_word(word):
-                    print('Invalid word')
+                    print("Invalid word")
                     continue
-                if mode == 'Search':
+                if mode == "Search":
                     print(search(word))
-                elif mode == 'Add':
+                elif mode == "Add":
                     print(add_word(word))
-                elif mode == 'Edit':
+                elif mode == "Edit":
                     print(edit(word))
-                elif mode == 'Remove':
+                elif mode == "Remove":
                     print(del_word(word))
             except KeyboardInterrupt:
-                print('')
+                print("")
                 break
             except EOFError:
-                print('')
+                print("")
                 break
-        print('Bye')
+        print("Bye")
         exit_app()
     except TimeoutError:
-        print('\nTimeout')
+        print("\nTimeout")
         exit_app()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
