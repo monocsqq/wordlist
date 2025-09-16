@@ -1,8 +1,10 @@
+import asyncio
 import atexit
 import os
 import pickle
 import pydoc
 import re
+import signal
 import sys
 
 from googletrans import Translator
@@ -13,8 +15,13 @@ dirname = ".wordlist"
 dirpath = os.path.join(home_dir, dirname)
 data = {}
 
-translator = Translator()
+# translator = Translator()
 
+class IdleTimeout(Exception):
+    pass
+
+def _alarm_handler(signum, frame):
+    raise IdleTimeout
 
 # Load the data
 def load_data():
@@ -53,7 +60,7 @@ def search(key):
         try:
             add = input("[y]/n: ")
             if add == "y" or add == "":
-                return add_word(key)
+                return asyncio.run(add_word(key))
             else:
                 return "Cancelled"
         except KeyboardInterrupt:
@@ -63,14 +70,31 @@ def search(key):
 
 
 # Add a word
-def add_word(key):
+# def add_word(key):
+#     if key in data:
+#         print("the word already exists")
+#         return "Cancelled"
+#     try:
+#         temp = ["word", 0]
+#         # temp[0] = input('Enter the meaning: ')
+#         temp[0] = translator.translate(key, dest="ja").text
+#         data[key] = temp
+#         save_data()
+#         return data[key][0]
+#     except KeyboardInterrupt:
+#         return "\nCancelled"
+#     except EOFError:
+#         return "\nCancelled"
+
+async def add_word(key):
     if key in data:
         print("the word already exists")
         return "Cancelled"
     try:
-        temp = ["word", 0]
-        # temp[0] = input('Enter the meaning: ')
-        temp[0] = translator.translate(key, dest="ja").text
+        # temp = ["word", 0]
+        translator = Translator()
+        translated = await translator.translate(key, dest="ja")
+        temp = [translated.text, 0]
         data[key] = temp
         save_data()
         return data[key][0]
@@ -78,7 +102,6 @@ def add_word(key):
         return "\nCancelled"
     except EOFError:
         return "\nCancelled"
-
 
 # Edit a word
 def edit(key):
@@ -135,60 +158,58 @@ def exit_app():
     save_data()
     print("Data saved to:", os.path.join(dirpath, "wordlist_data.pkl"))
 
+signal.signal(signal.SIGALRM, _alarm_handler)
 
 # Main
-@timeout(600)
 def main():
+    print("Loading data")
+    load_data()
+    print("Data loaded")
+    print("Enter a word to search")
+    # Mode: S = Search, E = Edit, R = Remove
+    mode = "Search"  # Search mode
     try:
-        print("Loading data")
-        load_data()
-        print("Data loaded")
-        print("Enter a word to search")
-        # Mode: S = Search, E = Edit, R = Remove
-        mode = "Search"  # Search mode
         while True:
+            signal.alarm(600)  # Set a timeout of 600 seconds
             try:
                 word = input(f"({mode})Enter word: ")
-                if word == "S":
-                    mode = "Search"
-                    continue
-                elif word == "A":
-                    mode = "Add"
-                    continue
-                elif word == "E":
-                    mode = "Edit"
-                    continue
-                elif word == "R":
-                    mode = "Remove"
-                    continue
-                elif word == "L":
-                    list_words()
-                    continue
-                elif word == "Q":
-                    break
-                elif not is_word(word):
-                    print("Invalid word")
-                    continue
-                if mode == "Search":
-                    print(search(word))
-                elif mode == "Add":
-                    print(add_word(word))
-                elif mode == "Edit":
-                    print(edit(word))
-                elif mode == "Remove":
-                    print(del_word(word))
-            except KeyboardInterrupt:
-                print("")
+                signal.alarm(0)
+            except IdleTimeout:
                 break
-            except EOFError:
-                print("")
+
+            if word == "S":
+                mode = "Search"
+                continue
+            elif word == "A":
+                mode = "Add"
+                continue
+            elif word == "E":
+                mode = "Edit"
+                continue
+            elif word == "R":
+                mode = "Remove"
+                continue
+            elif word == "L":
+                list_words()
+                continue
+            elif word == "Q":
                 break
+            elif not is_word(word):
+                print("Invalid word")
+                continue
+            if mode == "Search":
+                print(search(word))
+            elif mode == "Add":
+                print(add_word(word))
+            elif mode == "Edit":
+                print(edit(word))
+            elif mode == "Remove":
+                print(del_word(word))
+    except (KeyboardInterrupt, EOFError):
+        print()
+    finally:
         print("Bye")
         exit_app()
-    except TimeoutError:
-        print("\nTimeout")
-        exit_app()
-
 
 if __name__ == "__main__":
     main()
